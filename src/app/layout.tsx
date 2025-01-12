@@ -31,7 +31,7 @@ export default function RootLayout({
       <body
         className={`${poppins.variable} ${roboto.variable} antialiased`}
       >
-        <header className="sticky top-0">
+        <header className="sticky top-0 z-50">
           <Navbar />
         </header>
         {children}

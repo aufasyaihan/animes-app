@@ -50,7 +50,7 @@ export default function Carousel() {
     });
 
     return (
-        <div className="flex flex-col gap-2 w-[70%] mx-auto overflow-hidden">
+        <div className="flex flex-col gap-2 w-full mx-auto overflow-hidden">
             <div
                 className="flex gap-4 transition ease-in-out duration-500 w-[2000px] h-60"
                 style={{
@@ -63,7 +63,7 @@ export default function Carousel() {
                         className="w-40 h-60 bg-gray-600 animate-pulse"
                     ></div>
                 ))}
-                {animes.map((anime) => (
+                {animes?.length > 0 && animes.map((anime) => (
                     <Link
                         href={`/animes/${anime.mal_id}`}
                         key={anime.mal_id}
@@ -92,7 +92,7 @@ export default function Carousel() {
                             className="rounded-full w-2 h-2 bg-gray-600"
                         ></div>
                     ))}
-                    {Array.from({ length: animes.length - 4 }).map((_, i) => (
+                    {Array.from({ length: animes?.length - 4 }).map((_, i) => (
                         <div
                             onClick={() => setCurrentIndex(i)}
                             key={i}
