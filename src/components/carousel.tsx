@@ -76,14 +76,12 @@ export default function Carousel() {
             </div>
             <div className="flex justify-between items-center">
                 <div className="flex gap-2">
-                    {animes.map((anime, index) => (
+                    {Array.from({ length: animes.length - 4 }).map((_, i) => (
                         <div
-                            onClick={() => setCurrentIndex(index)}
-                            key={anime.mal_id + index}
+                            onClick={() => setCurrentIndex(i)}
+                            key={i}
                             className={`rounded-full w-2 h-2 cursor-pointer ${
-                                index === currentIndex
-                                    ? "bg-blue-700"
-                                    : "bg-white"
+                                i === currentIndex ? "bg-blue-700" : "bg-white"
                             }`}
                         ></div>
                     ))}
