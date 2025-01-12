@@ -2,18 +2,28 @@
 
 import { AnimeData } from "@/types/animeList";
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useState } from "react";
-import { Navigation, Pagination, Autoplay } from "swiper/modules";
-import { Swiper, SwiperSlide } from "swiper/react";
-import "swiper/css";
-import "swiper/css";
-import "swiper/css/navigation";
-import "swiper/css/pagination";
-import "swiper/css/scrollbar";
+import {
+    IoIosArrowDropleftCircle,
+    IoIosArrowDroprightCircle,
+} from "react-icons/io";
 
 export default function Carousel() {
     const [animes, setAnimes] = useState<AnimeData[]>([]);
-    // const [currentIndex, setCurrentIndex] = useState(0);
+    const [currentIndex, setCurrentIndex] = useState(0);
+
+    const previousSlide = () => {
+        setCurrentIndex((prevIndex) =>
+            prevIndex === 0 ? animes.length - 5 : prevIndex - 1
+        );
+    };
+
+    const nextSlide = () => {
+        setCurrentIndex((prevIndex) =>
+            prevIndex === animes.length - 5 ? 0 : prevIndex + 1
+        );
+    };
 
     useEffect(() => {
         fetch("https://api.jikan.moe/v4/top/anime?limit=10", {
@@ -26,72 +36,67 @@ export default function Carousel() {
             );
     }, []);
 
-    // useEffect(() => {
-    //     const interval = setInterval(() => {
-    //         setCurrentIndex((prevIndex) => (prevIndex + 1) % animes.length);
-    //     }, 5000); // 5 seconds
+    useEffect(() => {
+        if (animes.length > 0) {
+            const nextAuto = setInterval(() => {
+                nextSlide();
+            }, 3000);
 
-    //     return () => clearInterval(interval);
-    // }, [animes]);
+            return () => clearInterval(nextAuto);
+        }
+    });
 
     return (
-        <div className="overflow-hidden w-full px-40">
-            {/* <div
-        className="flex gap-5 transition-transform duration-500 ease-in-out h-fit "
-        style={{ transform: `translateX(-${currentIndex * 20}%)` }}
-      >
-        {animes.length > 0 &&
-          animes.map((anime) => (
-            <div key={anime.mal_id} className="overflow-hidden">
-              <Image
-                src={anime.images.webp.image_url}
-                alt={anime.title}
-                width={150}
-                height={100}
-                priority
-              />
-              <div className="h-full w-[150px] bg-gradient-to-t from-black absolute bottom-0"></div>
-              <h2 className="absolute bottom-0 w-[150px] text-wrap px-2 py-4">{anime.title}</h2>
-            </div>
-          ))}
-      </div> */}
-            <Swiper
-                // install Swiper modules
-                modules={[Navigation, Pagination, Autoplay]}
-                spaceBetween={5}
-                slidesPerView={7}
-                navigation
-                pagination={{ clickable: true }}
-                onSwiper={(swiper) => console.log(swiper)}
-                onSlideChange={() => console.log("slide change")}
-                loop={true}
-                autoplay={{
-                    delay: 5000,
-                    disableOnInteraction: false,
+        <div className="flex flex-col gap-2 w-[70%] mx-auto overflow-hidden">
+            <div
+                className="flex gap-4 transition ease-out duration-300 w-[2000px] h-60"
+                style={{
+                    transform: `translateX(-${currentIndex * (100 / 14)}%)`,
                 }}
             >
-                <div className="mx-40">
-                    {animes.length > 0 &&
-                        animes.map((anime) => (
-                            <SwiperSlide key={anime.mal_id}>
-                                <div className="h-full w-fit">
-                                    <Image
-                                        src={anime.images.webp.image_url}
-                                        alt={anime.title}
-                                        width={150}
-                                        height={100}
-                                        priority
-                                        className="h-[250px] w-auto"
-                                    />
-                                    <div className="w-full h-full bg-gradient-to-t from-black absolute bottom-0"></div>
-                                </div>
-                                <h2 className="absolute bottom-0 w-[150px] text-wrap px-2 py-4">
-                                    {anime.title}
-                                </h2>
-                            </SwiperSlide>
-                        ))}
+                {animes.map((anime) => (
+                    <Link
+                        href={`/animes/${anime.mal_id}`}
+                        key={anime.mal_id}
+                        className="w-fit h-full overflow-hidden relative group"
+                    >
+                        <Image
+                            src={anime.images.webp.image_url}
+                            alt={anime.title}
+                            width={150}
+                            height={100}
+                            className="w-fit h-full object-cover group-hover:scale-110 transition ease-out duration-300 cursor-pointer"
+                        />
+                        <div className="bg-gradient-to-t from-black w-full h-full absolute bottom-0"></div>
+                        <div className="absolute bottom-0 text-wrap w-full px-4 py-2">
+                            {anime.title}
+                        </div>
+                    </Link>
+                ))}
+            </div>
+            <div className="flex justify-between items-center">
+                <div className="flex gap-2">
+                    {animes.map((anime, index) => (
+                        <div
+                            onClick={() => setCurrentIndex(index)}
+                            key={anime.mal_id + index}
+                            className={`rounded-full w-2 h-2 cursor-pointer ${
+                                index === currentIndex
+                                    ? "bg-blue-700"
+                                    : "bg-white"
+                            }`}
+                        ></div>
+                    ))}
                 </div>
-            </Swiper>
+                <div className="text-right text-2xl">
+                    <button onClick={previousSlide}>
+                        <IoIosArrowDropleftCircle />
+                    </button>
+                    <button onClick={nextSlide}>
+                        <IoIosArrowDroprightCircle />
+                    </button>
+                </div>
+            </div>
         </div>
     );
 }
