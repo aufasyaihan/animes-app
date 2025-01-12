@@ -11,7 +11,8 @@ import {
 
 export default function Carousel() {
     const [animes, setAnimes] = useState<AnimeData[]>([]);
-    const [currentIndex, setCurrentIndex] = useState(0);
+    const [isLoading, setIsLoading] = useState<boolean>(true);
+    const [currentIndex, setCurrentIndex] = useState<number>(0);
 
     const previousSlide = () => {
         setCurrentIndex((prevIndex) =>
@@ -26,6 +27,7 @@ export default function Carousel() {
     };
 
     useEffect(() => {
+        setIsLoading(true);
         fetch("https://api.jikan.moe/v4/top/anime?limit=10", {
             headers: { "Content-Type": "application/json" },
         })
@@ -34,6 +36,7 @@ export default function Carousel() {
             .catch((error) =>
                 console.error("Error fetching anime data:", error)
             );
+        setIsLoading(false);
     }, []);
 
     useEffect(() => {
@@ -49,11 +52,17 @@ export default function Carousel() {
     return (
         <div className="flex flex-col gap-2 w-[70%] mx-auto overflow-hidden">
             <div
-                className="flex gap-4 transition ease-out duration-300 w-[2000px] h-60"
+                className="flex gap-4 transition ease-in-out duration-500 w-[2000px] h-60"
                 style={{
                     transform: `translateX(-${currentIndex * (100 / 14)}%)`,
                 }}
             >
+                {isLoading && Array.from({ length: 10 }).map((_, i) => (
+                    <div
+                        key={i}
+                        className="w-40 h-60 bg-gray-600 animate-pulse"
+                    ></div>
+                ))}
                 {animes.map((anime) => (
                     <Link
                         href={`/animes/${anime.mal_id}`}
@@ -65,6 +74,7 @@ export default function Carousel() {
                             alt={anime.title}
                             width={150}
                             height={100}
+                            priority
                             className="w-fit h-full object-cover group-hover:scale-110 transition ease-out duration-300 cursor-pointer"
                         />
                         <div className="bg-gradient-to-t from-black w-full h-full absolute bottom-0"></div>
@@ -76,6 +86,12 @@ export default function Carousel() {
             </div>
             <div className="flex justify-between items-center">
                 <div className="flex gap-2">
+                    {isLoading && Array.from({ length: 6 }).map((_, i) => (
+                        <div
+                            key={i}
+                            className="rounded-full w-2 h-2 bg-gray-600"
+                        ></div>
+                    ))}
                     {Array.from({ length: animes.length - 4 }).map((_, i) => (
                         <div
                             onClick={() => setCurrentIndex(i)}
