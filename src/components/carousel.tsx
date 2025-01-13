@@ -40,7 +40,7 @@ export default function Carousel() {
     }, []);
 
     useEffect(() => {
-        if (animes.length > 0) {
+        if (animes?.length > 0) {
             const nextAuto = setInterval(() => {
                 nextSlide();
             }, 3000);
@@ -54,7 +54,7 @@ export default function Carousel() {
             <div
                 className="flex gap-4 transition ease-in-out duration-500 w-[2000px] h-60"
                 style={{
-                    transform: `translateX(-${currentIndex * (100 / 14)}%)`,
+                    transform: `translateX(-${currentIndex * (100 / 15)}%)`,
                 }}
             >
                 {isLoading && Array.from({ length: 10 }).map((_, i) => (
@@ -75,7 +75,7 @@ export default function Carousel() {
                             width={150}
                             height={100}
                             priority
-                            className="w-fit h-full object-cover group-hover:scale-110 transition ease-out duration-300 cursor-pointer"
+                            className="w-fit h-full object-cover group-hover:scale-110 transition ease-out duration-500 cursor-pointer"
                         />
                         <div className="bg-gradient-to-t from-black w-full h-full absolute bottom-0"></div>
                         <div className="absolute bottom-0 text-wrap w-full px-4 py-2">
