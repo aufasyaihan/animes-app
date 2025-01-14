@@ -5,7 +5,7 @@ import Link from "next/link";
 export default function Home() {
     return (
         <>
-            <main className="flex flex-col w-full mt-4 items-center sm:items-start">
+            <main className="flex flex-col w-full h-full mt-4 items-center sm:items-start">
                 <section className="flex flex-col gap-4 w-3/4 mt-4 mx-auto items-center sm:items-start">
                     <h1 className="text-xl font-bold w-full mx-auto">
                         Popular Anime
@@ -22,15 +22,9 @@ export default function Home() {
                             Lihat Semua Anime
                         </Link>
                     </div>
-                    <AnimeList />
+                    <AnimeList category="ongoing"/>
                 </section>
             </main>
-            <footer className="flex gap-6 flex-wrap items-center justify-center px-4 py-2 bg-blue-900 text-white">
-                <p className="text-center">
-                    © 2025 YourAnimeList{" "}
-                    <span className="font-bold">Made By Aufa</span>
-                </p>
-            </footer>
         </>
     );
 }
