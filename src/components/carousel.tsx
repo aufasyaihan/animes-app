@@ -18,13 +18,13 @@ export default function Carousel() {
 
     // const previousSlide = () => {
     //     setCurrentIndex((prevIndex) =>
-    //         prevIndex === 0 ? animes.length - 5 : prevIndex - 1
+    //         prevIndex === 0 ? animes.length - 1 : prevIndex - 1
     //     );
     // };
 
     // const nextSlide = () => {
     //     setCurrentIndex((prevIndex) =>
-    //         prevIndex === animes.length - 5 ? 0 : prevIndex + 1
+    //         prevIndex === animes.length - 1 ? 0 : prevIndex + 1
     //     );
     // };
 
@@ -128,7 +128,7 @@ export default function Carousel() {
                     spaceBetween={5}
                     slidesPerView={5}
                     pagination={{ clickable: true }}
-                    loop={animes.length > 4}
+                    loop={animes?.length > 4}
                     onSwiper={(swiper) => console.log(swiper)}
                     onSlideChange={() => console.log("slide change")}
                     autoplay={{
