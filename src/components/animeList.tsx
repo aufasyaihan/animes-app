@@ -1,8 +1,8 @@
 "use client";
 import { AnimeData } from "@/types/animeList";
-import Card from "@/UI/card";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import Card from "./UI/card";
 
 export default function AnimeList({ category }: { category: string }) {
     const [animes, setAnimes] = useState<AnimeData[]>([]);
@@ -27,7 +27,7 @@ export default function AnimeList({ category }: { category: string }) {
         setIsLoading(false);
     }, []);
     return (
-        <div className="flex flex-row flex-wrap justify-between gap-4 w-full mx-auto pb-8">
+        <div className="grid grid-cols-6 gap-4 w-fit mx-auto pb-8">
             {isLoading &&
                 Array.from({ length: 10 }).map((_, i) => (
                     <Card key={i}>
@@ -48,8 +48,10 @@ export default function AnimeList({ category }: { category: string }) {
                                 className="object-cover w-full group-hover:scale-110 transition-all ease-out duration-500"
                             />
                         </div>
-                        <h2 className="w-48 font-bold text-wrap p-2">
-                            {anime.title}
+                        <h2 className="p-2">
+                            <p className="font-bold w-full text-ellipsis whitespace-nowrap overflow-hidden">
+                                {anime.title}
+                            </p>
                         </h2>
                     </Card>
                 ))}

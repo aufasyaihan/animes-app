@@ -1,5 +1,5 @@
 import AnimeList from "@/components/animeList";
-import FilterButton from "@/UI/filterButton";
+import FilterButton from "@/components/UI/filterButton";
 
 export default function AnimesPage() {
     return (

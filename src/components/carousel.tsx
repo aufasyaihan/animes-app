@@ -9,7 +9,7 @@ import { useEffect, useState } from "react";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-import SwiperButton from "@/UI/swiperButton";
+import SwiperButton from "./UI/swiperButton";
 
 export default function Carousel() {
     const [animes, setAnimes] = useState<AnimeData[]>([]);

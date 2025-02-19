@@ -27,14 +27,14 @@ export default function RootLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <html lang="en">
+        <html lang="en" className="h-[100vh]">
             <body
-                className={`${poppins.variable} ${roboto.variable} antialiased`}
+                className={`${poppins.variable} ${roboto.variable} antialiased h-full flex flex-col`}
             >
                 <header className="sticky top-0 z-50">
                     <Navbar />
                 </header>
-                {children}
+                <main className="flex-1">{children}</main>
                 <footer className="flex gap-6 flex-wrap items-center justify-center px-4 py-2 bg-blue-900 text-white">
                     <p className="text-center">
                         © 2025 YourAnimeList{" "}
