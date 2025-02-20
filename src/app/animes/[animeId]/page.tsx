@@ -98,7 +98,7 @@ export default async function AnimePage({ params }: { params: ParamsType }) {
                                     <p className="text-ellipsis whitespace-nowrap overflow-hidden w-[1000px]">
                                         {episode.title}
                                     </p>
-                                    <span>↗</span>
+                                    <span className="px-2">↗</span>
                                 </div>
                             </a>
                         </div>
