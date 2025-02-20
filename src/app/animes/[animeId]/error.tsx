@@ -1,9 +1,16 @@
 "use client";
 
-export default function ErrorDetail() {
+interface ErrorDetailProps {
+    error: {
+        message: string;
+    }
+}
+
+export default function ErrorDetail({ error }: ErrorDetailProps) {
     return (
-        <div className="flex items-center justify-center h-full">
-            <h1 className="text-3xl font-bold">An Unknown Error Has Occured</h1>
+        <div className="flex flex-col items-center justify-center h-full">
+            <h1 className="text-3xl font-bold">{error.message}</h1>
+            <p>Try again later</p>
         </div>
     );
 }

@@ -14,6 +14,9 @@ export default async function AnimePage({ params }: { params: ParamsType }) {
             headers: { "Content-Type": "application/json" },
         }
     );
+    if(!resAnime.ok) {
+        throw new Error("Failed to fetch data from the server");
+    }
     const data = await resAnime.json();
     const animes: AnimeDataType = data?.data;
 
@@ -23,6 +26,9 @@ export default async function AnimePage({ params }: { params: ParamsType }) {
             headers: { "Content-Type": "application/json" },
         }
     );
+    if(!resEpisode.ok) {
+        throw new Error("Failed to fetch data from the server");
+    }
     const dataEpisode = await resEpisode.json();
     const episodes: EpisodesType[] = dataEpisode?.data;
 

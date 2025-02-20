@@ -20,8 +20,6 @@ export default function Carousel({ animes }: { animes: AnimeDataType[] }) {
                     slidesPerView={5}
                     pagination={{ clickable: true }}
                     loop={animes?.length > 4}
-                    onSwiper={(swiper) => console.log(swiper)}
-                    onSlideChange={() => console.log("slide change")}
                     autoplay={{
                         delay: 3000,
                     }}
