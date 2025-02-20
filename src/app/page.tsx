@@ -6,12 +6,24 @@ import Link from "next/link";
 import { Suspense } from "react";
 
 async function MainCarousel() {
-    const res = await fetch("https://api.jikan.moe/v4/top/anime?limit=15", {
-        headers: { "Content-Type": "application/json" },
-    }).then((res) => res.json());
-    const animes: AnimeDataType[] = res?.data;
+    try {
+        const res = await fetch("https://api.jikan.moe/v4/top/anime?limit=15", {
+            headers: { "Content-Type": "application/json" },
+        })
+        if (!res.ok) {
+            throw new Error("Failed to fetch data from the server");
+        }
+        const data = await res.json();
+        const animes: AnimeDataType[] = data?.data;
 
-    return <Carousel animes={animes} />;
+        return <Carousel animes={animes} />;
+    } catch (error) {
+        return (
+            <div className="my-2 border-l-4 border-red-400 bg-red-200 text-white p-4 rounded-r-md w-full">
+                <p className="text-red-500">{(error as Error).message}</p>
+            </div>
+        );
+    }
 }
 
 export default function Home() {

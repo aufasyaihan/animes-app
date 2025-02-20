@@ -10,25 +10,38 @@ async function Anime({ category }: { category: string }) {
         url = "https://api.jikan.moe/v4/seasons/now?limit=10";
     }
 
-    const res = await fetch(url, {
-        headers: { "Content-Type": "application/json" },
-    });
-    const animes: AnimeListType = await res.json();
-    const animesData: AnimeDataType[] = animes?.data;
+    try {
+        const res = await fetch(url, {
+            headers: { "Content-Type": "application/json" },
+        });
+        if (!res.ok) {
+            throw new Error("Failed to fetch data from the server");
+        }
+        const animes: AnimeListType = await res.json();
+        const animesData: AnimeDataType[] = animes?.data;
 
-    return animesData?.map((anime) => (
-        <Card key={anime.mal_id} href={`/animes/${anime.mal_id}`}>
-            <AnimeData {...anime} />
-        </Card>
-    ));
+        return (
+            <div className="grid grid-cols-5 justify-between gap-4 w-full mx-auto pb-8">
+                {animesData.map((anime) => (
+                    <Card key={anime.mal_id} href={`/animes/${anime.mal_id}`}>
+                        <AnimeData {...anime} />
+                    </Card>
+                ))}
+            </div>
+        );
+    } catch (error) {
+        return (
+            <div className="my-2 border-l-4 border-red-400 bg-red-200 text-white p-4 rounded-r-md w-full">
+                <p className="text-red-500">{(error as Error).message}</p>
+            </div>
+        );
+    }
 }
 
 export default function AnimeList({ category }: { category: string }) {
     return (
         <Suspense fallback={<LoadingAnimeList />}>
-            <div className="grid grid-cols-5 justify-between gap-4 w-full mx-auto pb-8">
-                <Anime category={category} />
-            </div>
+            <Anime category={category} />
         </Suspense>
     );
 }
