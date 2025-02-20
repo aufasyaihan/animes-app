@@ -1,53 +1,30 @@
-"use client";
-
 import Chips from "@/components/UI/chips";
 import { AnimeDataType } from "@/types/animeList";
 import { EpisodesType } from "@/types/episodes";
 import Image from "next/image";
-import { useEffect, useState } from "react";
 
-export default function AnimePage({
-    params,
-}: {
-    params: Promise<{ params: string }>;
-}) {
-    const [animes, setAnimes] = useState<AnimeDataType>();
-    const [animeId, setAnimeId] = useState<string | null>(null);
-    const [episodes, setEpisodes] = useState<EpisodesType[]>();
+interface ParamsType {
+    animeId: string;
+}
 
-    useEffect(() => {
-        params
-            .then((resolvedParams) => {
-                setAnimeId(resolvedParams.params);
-            })
-            .catch((error) => console.error("Error resolving params:", error));
-    }, [params]);
-
-    useEffect(() => {
-        if (animeId) {
-            fetch(`https://api.jikan.moe/v4/anime/${animeId}`, {
-                headers: { "Content-Type": "application/json" },
-            })
-                .then((res) => res.json())
-                .then((data) => setAnimes(data.data))
-                .catch((error) =>
-                    console.error("Error fetching anime data:", error)
-                );
+export default async function AnimePage({ params }: { params: ParamsType }) {
+    const resAnime = await fetch(
+        `https://api.jikan.moe/v4/anime/${params.animeId}`,
+        {
+            headers: { "Content-Type": "application/json" },
         }
-    }, [animeId]);
+    );
+    const data = await resAnime.json();
+    const animes: AnimeDataType = data?.data;
 
-    useEffect(() => {
-        if (animeId) {
-            fetch(`https://api.jikan.moe/v4/anime/${animeId}/episodes`, {
-                headers: { "Content-Type": "application/json" },
-            })
-                .then((res) => res.json())
-                .then((data) => setEpisodes(data.data))
-                .catch((error) =>
-                    console.error("Error fetching anime data:", error)
-                );
+    const resEpisode = await fetch(
+        `https://api.jikan.moe/v4/anime/${params.animeId}/episodes`,
+        {
+            headers: { "Content-Type": "application/json" },
         }
-    }, [animeId]);
+    );
+    const dataEpisode = await resEpisode.json();
+    const episodes: EpisodesType[] = dataEpisode?.data;
 
     return (
         <article className="flex flex-col gap-2 mx-auto w-3/4 h-full my-4 items-center sm:items-start">
@@ -100,14 +77,21 @@ export default function AnimePage({
                 <h3 className="text-lg">Episodes</h3>
                 <div className="flex flex-col items-center gap-2 ">
                     {episodes?.map((episode, index) => (
-                        <div className="flex items-center gap-2 w-full" key={episode.mal_id}>
-                            <p className="p-2 bg-gray-700 rounded-sm w-10 text-center">{index + 1}</p>
+                        <div
+                            className="flex items-center gap-2 w-full"
+                            key={episode.mal_id}
+                        >
+                            <p className="p-2 bg-gray-700 rounded-sm w-10 text-center">
+                                {index + 1}
+                            </p>
                             <a
                                 className="flex gap-2 bg-gray-600 w-full p-2 rounded-sm hover:bg-gray-700"
                                 href={episode.url}
                             >
                                 <div className="flex justify justify-between w-full">
-                                    {episode.title}
+                                    <p className="text-ellipsis whitespace-nowrap overflow-hidden w-[1000px]">
+                                        {episode.title}
+                                    </p>
                                     <span>↗</span>
                                 </div>
                             </a>
