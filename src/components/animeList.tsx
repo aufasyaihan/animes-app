@@ -7,10 +7,8 @@ import Card from "./UI/card";
 export default function AnimeList({ category }: { category: string }) {
     const [animes, setAnimes] = useState<AnimeData[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(true);
-    let url: string;
-    if (category === "all") {
-        url = "https://api.jikan.moe/v4/top/anime?limit=20";
-    } else if (category === "ongoing") {
+    let url: string = "https://api.jikan.moe/v4/top/anime?limit=20";
+    if (category === "ongoing") {
         url = "https://api.jikan.moe/v4/seasons/now?limit=10";
     }
 
@@ -25,9 +23,9 @@ export default function AnimeList({ category }: { category: string }) {
                 console.error("Error fetching anime data:", error)
             );
         setIsLoading(false);
-    }, []);
+    }, [url]);
     return (
-        <div className="grid grid-cols-6 gap-4 w-fit mx-auto pb-8">
+        <div className="grid grid-cols-5 justify-between gap-4 w-full mx-auto pb-8">
             {isLoading &&
                 Array.from({ length: 10 }).map((_, i) => (
                     <Card key={i}>
