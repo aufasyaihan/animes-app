@@ -1,7 +1,7 @@
 "use client";
 
 import Chips from "@/components/UI/chips";
-import { AnimeData } from "@/types/animeList";
+import { AnimeDataType } from "@/types/animeList";
 import { EpisodesType } from "@/types/episodes";
 import Image from "next/image";
 import { useEffect, useState } from "react";
@@ -11,7 +11,7 @@ export default function AnimePage({
 }: {
     params: Promise<{ params: string }>;
 }) {
-    const [animes, setAnimes] = useState<AnimeData>();
+    const [animes, setAnimes] = useState<AnimeDataType>();
     const [animeId, setAnimeId] = useState<string | null>(null);
     const [episodes, setEpisodes] = useState<EpisodesType[]>();
 
@@ -101,7 +101,7 @@ export default function AnimePage({
                 <div className="flex flex-col items-center gap-2 ">
                     {episodes?.map((episode, index) => (
                         <div className="flex items-center gap-2 w-full" key={episode.mal_id}>
-                            <p className="p-2 bg-gray-700 rounded-sm">{index + 1}</p>
+                            <p className="p-2 bg-gray-700 rounded-sm w-10 text-center">{index + 1}</p>
                             <a
                                 className="flex gap-2 bg-gray-600 w-full p-2 rounded-sm hover:bg-gray-700"
                                 href={episode.url}

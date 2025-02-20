@@ -1,9 +1,9 @@
-export interface AnimeList {
-  data: AnimeData[]
+export interface AnimeListType {
+  data: AnimeDataType[]
   pagination: Pagination
 }
 
-export interface AnimeData {
+export interface AnimeDataType {
   mal_id: number
   url: string
   images: Images

@@ -1,56 +1,27 @@
-"use client";
-import { AnimeData } from "@/types/animeList";
-import Image from "next/image";
-import { useEffect, useState } from "react";
+import { AnimeDataType, AnimeListType } from "@/types/animeList";
 import Card from "./UI/card";
+import AnimeData from "./animeData";
 
-export default function AnimeList({ category }: { category: string }) {
-    const [animes, setAnimes] = useState<AnimeData[]>([]);
-    const [isLoading, setIsLoading] = useState<boolean>(true);
+export default async function AnimeList({ category }: { category: string }) {
     let url: string = "https://api.jikan.moe/v4/top/anime?limit=20";
     if (category === "ongoing") {
         url = "https://api.jikan.moe/v4/seasons/now?limit=10";
     }
 
-    useEffect(() => {
-        setIsLoading(true);
-        fetch(url, {
+        const res = await fetch(url, {
             headers: { "Content-Type": "application/json" },
         })
-            .then((res) => res.json())
-            .then((data) => setAnimes(data.data))
-            .catch((error) =>
-                console.error("Error fetching anime data:", error)
-            );
-        setIsLoading(false);
-    }, [url]);
+        const animes: AnimeListType = await res.json()
+        const animesData : AnimeDataType[] = animes?.data
+
+        console.log(animes);
+        
     return (
         <div className="grid grid-cols-5 justify-between gap-4 w-full mx-auto pb-8">
-            {isLoading &&
-                Array.from({ length: 10 }).map((_, i) => (
-                    <Card key={i}>
-                        <div className="h-64 bg-gray-600 w-48 animate-pulse"></div>
-                        <h2 className="w-48 font-bold text-wrap p-2 bg-gray-600 animate-pulse"></h2>
-                    </Card>
-                ))}
-            {animes?.length > 0 &&
-                animes.map((anime) => (
+            {animesData.length > 0 &&
+                animesData.map((anime) => (
                     <Card key={anime.mal_id} href={`/animes/${anime.mal_id}`}>
-                        <div className="h-64 overflow-hidden">
-                            <Image
-                                src={anime.images.webp.image_url}
-                                alt={anime.title}
-                                width={200}
-                                height={300}
-                                priority
-                                className="object-cover w-full group-hover:scale-110 transition-all ease-out duration-500"
-                            />
-                        </div>
-                        <h2 className="p-2">
-                            <p className="font-bold w-full text-ellipsis whitespace-nowrap overflow-hidden">
-                                {anime.title}
-                            </p>
-                        </h2>
+                        <AnimeData {...anime} />
                     </Card>
                 ))}
         </div>
